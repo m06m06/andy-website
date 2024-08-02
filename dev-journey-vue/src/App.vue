@@ -1,18 +1,28 @@
 <template>
   <div id="app">
-    <UserList />
+    <div class="container">
+      <SidebarMenu @select-page="currentPage = $event" />
+      <MainContentArea :currentPage="currentPage" />
+    </div>
   </div>
 </template>
 
 <script>
-import UserList from './components/UserList.vue';
+import SidebarMenu from './components/SidebarMenu.vue';
+import MainContentArea from './components/MainContentArea.vue';
 
 export default {
   name: 'App',
   components: {
-    UserList,
+    SidebarMenu,
+    MainContentArea
   },
-};
+  data() {
+    return {
+      currentPage: 'UserList'
+    };
+  }
+}
 </script>
 
 <style>
@@ -22,6 +32,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex: 1;
 }
 </style>

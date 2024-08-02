@@ -2,10 +2,10 @@ package com.AndyChu.DevJourney.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.AndyChu.DevJourney.model.User;
@@ -16,10 +16,15 @@ public class ApiUser {
 	
 	private UserRepository userRepository;
 	
-	@Autowired
-    public ApiUser(UserRepository userRepository) {
+	public ApiUser(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+	
+	@PostMapping("/signUpUser")
+	public ResponseEntity<User> signUpUser(@RequestBody User user){
+		User savedUser = userRepository.save(user);
+		return ResponseEntity.ok(savedUser);
+	}
 	
 	@GetMapping("/userList")
 	public List<User> showUserList() {	
