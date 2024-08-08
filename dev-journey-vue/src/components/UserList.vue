@@ -5,7 +5,7 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>用户名</th>
+          <th>帳號</th>
           <th>密码</th>
           <th>昵称</th>
           <th>邮箱</th>
@@ -16,7 +16,7 @@
       <tbody>
         <tr v-for="user in users" :key="user.userId">
           <td>{{ user.userId }}</td>
-          <td>{{ user.userName }}</td>
+          <td>{{ user.account }}</td>
           <td>{{ user.password }}</td>
           <td>{{ user.nickname }}</td>
           <td>{{ user.email }}</td>
