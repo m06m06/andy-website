@@ -1,0 +1,16 @@
+/* src/assets/css/app.css */
+
+/* 設置應用的基礎結構 */
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  display: flex;
+}
+
+
+
+
+

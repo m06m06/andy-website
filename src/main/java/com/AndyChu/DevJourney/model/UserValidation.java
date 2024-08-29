@@ -14,41 +14,63 @@ public class UserValidation {
         String passwordTooWeak = "PASSWORD_TOO_WEAK";
         String passwordMismatch = "PASSWORD_MISMATCH";
         
-        // 检查帳號是否已被註冊
-        if (user.getAccount() != null && userRepository.findByAccount(user.getAccount()).isPresent()) {
-            errorMsgs.put("account", "ACCOUNT_ALREADY_REGISTERED");
-            validatorMsg.add("帳號已被註冊！");
-            System.out.println("account_already_registered");
+        // 檢查帳號是不是空值
+        if (user.getAccount() == null || user.getAccount().trim().isEmpty()) {
+            errorMsgs.put("account", "ACCOUNT_CANNOT_BE_EMPTY");
+            validatorMsg.add("帳號不能為空！");
+            System.out.println("account_cannot_be_empty");
+        } else {
+            // 檢查帳號是否已被註冊
+            if (userRepository.findByAccount(user.getAccount()).isPresent()) {
+                errorMsgs.put("account", "ACCOUNT_ALREADY_REGISTERED");
+                validatorMsg.add("帳號已被註冊！");
+                System.out.println("account_already_registered");
+            }
         }
 
-        // 驗證email格式
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        if (user.getEmail() == null || user.getEmail().trim().isEmpty() || !pattern.matcher(user.getEmail()).matches()) {
-            errorMsgs.put("email", invalidEmail);
-            validatorMsg.add("信箱格式錯誤！");
-            System.out.println("email_error");
+        // Email是不是空值
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            errorMsgs.put("email", "EMAIL_CANNOT_BE_EMPTY");
+            validatorMsg.add("信箱不能為空！");
+            System.out.println("email_cannot_be_empty");
+        } else {
+            // 驗證 Email 格式
+            String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+            Pattern pattern = Pattern.compile(emailRegex);
+            if (!pattern.matcher(user.getEmail()).matches()) {
+                errorMsgs.put("email", "INVALID_EMAIL_FORMAT");
+                validatorMsg.add("信箱格式錯誤！");
+                System.out.println("email_error");
+            } else {
+            	// 檢查信箱是否重複
+                if (user.getEmail() != null && userRepository.findByEmail(user.getEmail()).isPresent()) {
+                    errorMsgs.put("email", "EMAIL_ALREADY_REGISTERED");
+                    validatorMsg.add("該信箱已被註冊！");
+                    System.out.println("email_already_registered");
+                }
+            }
         }
 
-        // 验证密码长度和复杂度
-        if (user.getPassword() == null || user.getPassword().trim().isEmpty() || !isValidPassword(user.getPassword())) {
-            errorMsgs.put("password", passwordTooWeak);
-            validatorMsg.add("密碼長度至少8碼，且必須包含大小寫英文、數字");
-            System.out.println("password_error");
+        // 檢查密碼是不是空值
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            errorMsgs.put("password", "PASSWORD_CANNOT_BE_EMPTY");
+            validatorMsg.add("密碼不能為空！");
+            System.out.println("password_cannot_be_empty");
+        } else {
+            // 檢查密碼複雜度
+            if (!isValidPassword(user.getPassword())) {
+                errorMsgs.put("password", "PASSWORD_TOO_WEAK");
+                validatorMsg.add("密碼長度至少8碼，且必須包含大小寫英文、數字");
+                System.out.println("password_error");
+            }
         }
 
-        // 验证确认密码是否匹配
+
+        // 驗證密碼與確認密碼
         if (user.getPassword() != null && !user.getPassword().equals(user.getConfirmPassword())) {
             errorMsgs.put("confirmPassword", passwordMismatch);
             validatorMsg.add("確認密碼不符！");
             System.out.println("confirmPassword_error");
-        }
-
-        // 检查邮箱是否已被注册
-        if (user.getEmail() != null && userRepository.findByEmail(user.getEmail()).isPresent()) {
-            errorMsgs.put("email", "EMAIL_ALREADY_REGISTERED");
-            validatorMsg.add("該信箱已被註冊！");
-            System.out.println("email_already_registered");
         }
 
         return new ValidationResult(errorMsgs, validatorMsg);

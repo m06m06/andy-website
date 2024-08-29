@@ -36,13 +36,13 @@ public class ApiUser {
 	@PostMapping("/signUpUser")
 	@Operation(summary = "註冊新用戶")
 	public ResponseEntity<?> signUpUser(@RequestBody User user){
-		// 验证用户信息
+		// 註冊資料檢核
         ValidationResult validationResult = UserValidation.validateUser(user, userRepository);
         if (validationResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationResult.getValidatorMsg());
         }
         
-        // 保存用户信息
+        // 儲存註冊資料
         User savedUser = userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
 	}

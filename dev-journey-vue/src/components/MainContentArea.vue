@@ -1,12 +1,13 @@
 <template>
-    <div class="main-content">
+    <div class="main-content-area">
       <component :is="currentPage"></component>
     </div>
   </template>
   
   <script>
-  import UserList from './UserList.vue';
-  import SignupUser from './SignUpUser.vue';
+  import UserList from './page/UserList.vue';
+  import SignupUser from './page/SignUpUser.vue';
+  import '@/assets/css/main-content-area.css'; 
   
   export default {
     name: 'MainContentArea',
@@ -17,11 +18,5 @@
     props: ['currentPage']
   }
   </script>
-  
-  <style scoped>
-  .main-content {
-    flex: 1;
-    padding: 20px;
-  }
-  </style>
+
   
